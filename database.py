@@ -6,6 +6,7 @@ DB_NAME = "team.db"
 def create_table():
 
     conn = sqlite3.connect(DB_NAME)
+
     cursor = conn.cursor()
 
     cursor.execute("""
@@ -15,11 +16,15 @@ def create_table():
 
         name TEXT NOT NULL,
 
-        age INTEGER,
-
         experience INTEGER,
 
-        city TEXT NOT NULL,
+        work_location TEXT,
+
+        district TEXT,
+
+        state TEXT,
+
+        country TEXT,
 
         latitude REAL,
 
@@ -34,9 +39,11 @@ def create_table():
 
 def add_member(
         name,
-        age,
         experience,
-        city,
+        work_location,
+        district,
+        state,
+        country,
         latitude,
         longitude):
 
@@ -48,19 +55,23 @@ def add_member(
     INSERT INTO members
     (
         name,
-        age,
         experience,
-        city,
+        work_location,
+        district,
+        state,
+        country,
         latitude,
         longitude
     )
-    VALUES (?, ?, ?, ?, ?, ?)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     """,
     (
         name,
-        age,
         experience,
-        city,
+        work_location,
+        district,
+        state,
+        country,
         latitude,
         longitude
     ))
@@ -105,9 +116,11 @@ def delete_member(member_id):
 def update_member(
         member_id,
         name,
-        age,
         experience,
-        city,
+        work_location,
+        district,
+        state,
+        country,
         latitude,
         longitude):
 
@@ -119,18 +132,22 @@ def update_member(
     UPDATE members
     SET
         name = ?,
-        age = ?,
         experience = ?,
-        city = ?,
+        work_location = ?,
+        district = ?,
+        state = ?,
+        country = ?,
         latitude = ?,
         longitude = ?
     WHERE id = ?
     """,
     (
         name,
-        age,
         experience,
-        city,
+        work_location,
+        district,
+        state,
+        country,
         latitude,
         longitude,
         member_id
