@@ -20,4 +20,5 @@ Thumbs.db
 *.log
 
 # Database Backups
+team.db
 *_backup.db
