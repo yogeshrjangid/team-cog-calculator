@@ -275,22 +275,59 @@ if not df.empty:
     # --------------------------------------------------
     # MEMBER MARKERS
     # --------------------------------------------------
-    for _, r in df.iterrows():
+
+    grouped_locations = df.groupby([
+        "Latitude",
+        "Longitude",
+        "Work Location",
+        "District",
+        "State",
+        "Country"])
+
+    for (
+        lat,
+        lon,
+        work_location,
+        district,
+        state,
+        country
+        ), group in grouped_locations:
+
+        member_names = list(group["Name"])
+        tooltip_text = f"""
+        <div style="
+            font-size:10px;
+            line-height:1.0;
+            color:blue;
+            font-weight:normal;
+            text-align:center;
+            ">
+            <b>{work_location} : </b><br>
+            {'<br>'.join(member_names)}
+        </div>
+        """
+
+        popup_text = f"""
+        <div style="font-size:10px;">
+        <b>Work Location:</b> {work_location}<br>
+        <b>District:</b> {district}<br>
+        <b>State:</b> {state}<br>
+        <b>Members:</b><br>
+        {'<br>'.join(member_names)}
+        </div>
+        """
+
         folium.Marker(
-            [r["Latitude"], r["Longitude"]],
+            [lat, lon],
             tooltip=folium.Tooltip(
-                r["Name"],
+                tooltip_text,
                 permanent=True,
                 direction="top"
             ),
-            popup=f"""
-            <b>{r['Name']}</b><br>
-            Experience: {r['Experience']}<br>
-            Work Location: {r['Work Location']}<br>
-            District: {r['District']}<br>
-            State: {r['State']}<br>
-            Country: {r['Country']}
-            """
+            popup=folium.Popup(
+             popup_text,
+             max_width=300
+            )
         ).add_to(m)
     # --------------------------------------------------
     # COG MARKER
