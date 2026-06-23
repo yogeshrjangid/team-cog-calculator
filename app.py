@@ -44,22 +44,27 @@ def get_coordinates( work_location, district, state, country):
 
     return (None, None, None, False)
 
-def get_nearest_city(lat, lon):
+def get_cog_location(lat, lon):
     try:
-        location = geolocator.reverse((lat, lon), exactly_one=True)
+        location = geolocator.reverse(
+            (lat, lon),
+            exactly_one=True)
         if location:
             address = location.raw.get("address", {})
-            return (
-                address.get("city")
+            city = (address.get("city")
                 or address.get("town")
                 or address.get("county")
                 or address.get("state_district")
-                or address.get("state")
-                or "Unknown"
-            )
+                or "Unknown")
+            district = (address.get("state_district")
+                or address.get("county")
+                or "Unknown")
+            state = (address.get("state")
+                or "Unknown")
+            return city, district, state
     except Exception:
         pass
-    return "Unknown"
+    return "Unknown", "Unknown", "Unknown"
 
 # --------------------------------------------------
 # TITLE
@@ -259,7 +264,7 @@ if not df.empty:
     # ==================================================
     cog_lat = df["Latitude"].mean()
     cog_lon = df["Longitude"].mean()
-    cog_city = get_nearest_city(cog_lat, cog_lon)
+    cog_city, cog_district, cog_state = get_cog_location(cog_lat, cog_lon)
     # ==================================================
     # MAP
     # ==================================================
@@ -293,7 +298,12 @@ if not df.empty:
     folium.Marker(
         [cog_lat, cog_lon],
         tooltip="COG",
-        popup=f"Nearest City: {cog_city}",
+        popup=f"""
+        <b>Center Of Gravity</b><br>
+        City: {cog_city}<br>
+        District: {cog_district}<br>
+        State: {cog_state}
+        """,
         icon=folium.Icon(color="red")
     ).add_to(m)
 
@@ -304,10 +314,14 @@ if not df.empty:
     st.markdown("---")
     st.subheader("Center Of Gravity")
 
-    c1, c2, c3 = st.columns(3)
+    c1, c2 = st.columns(2)
     c1.metric("COG Latitude", round(cog_lat, 4))
     c2.metric("COG Longitude", round(cog_lon, 4))
-    c3.metric("Nearest City", cog_city)
+    st.info(f"""
+    📍 Nearest City: {cog_city}
+    🏛 District: {cog_district}
+    🌎 State: {cog_state}
+    """)
     # ==================================================
     # DELETE
     # ==================================================
