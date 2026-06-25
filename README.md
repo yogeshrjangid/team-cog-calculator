@@ -72,7 +72,7 @@ The application allows users to add team members, automatically determine their 
 
 ## Project Structure
 
-COG_SCY/
+COG_PROJECT/
 
 ├── app.py
 
@@ -131,7 +131,7 @@ pip install -r requirements.txt
 Navigate to the project directory:
 
 ```cmd
-cd "C:\SCY Labs\COG_SCY"
+cd "C:\User\COG_PROJECT"
 ```
 
 Activate the virtual environment:
@@ -178,9 +178,9 @@ The application automatically finds the city coordinates and stores the member.
 Select an existing member and update:
 
 * Name
-* Age
 * Experience
 * City
+* State
 
 Click:
 
@@ -242,7 +242,7 @@ Potential future improvements:
 * World map support
 * Excel export
 * PDF reports
-* Bulk member upload
+* Bulk member upload with city database (latitude and longitude) removing dependency on libraries
 * Experience-weighted COG
 * Age-weighted COG
 * Authentication and user management
