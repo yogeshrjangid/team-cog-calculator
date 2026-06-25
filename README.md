@@ -161,9 +161,9 @@ http://localhost:8501
 Enter:
 
 * Name
-* Age
-* Domain Experience
+* Experience
 * City
+* State
 
 Click:
 
